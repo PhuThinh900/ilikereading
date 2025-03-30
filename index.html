@@ -14,11 +14,18 @@
         <button onclick="handleLogin()">Đăng nhập</button>
     </div>
 
-    <div id="reader-section" style="display: none;">
-        <input type="text" id="search" placeholder="Tìm kiếm chương..." oninput="searchChapters()">
-        <h2 id="chapter-title"></h2>
+    <div id="story-section" class="hidden">
+        <h2>Danh sách truyện</h2>
+        <input type="text" id="search-story" placeholder="Tìm kiếm truyện..." oninput="searchStories()">
+        <ul id="story-list"></ul>
+    </div>
+
+    <div id="reader-section" class="hidden">
+        <h2 id="story-title"></h2>
+        <input type="text" id="search-chapter" placeholder="Tìm kiếm chương..." oninput="searchChapters()">
+        <h3 id="chapter-title"></h3>
         <p id="chapter-content"></p>
-        
+
         <div class="buttons">
             <button onclick="prevChapter()" id="prev-btn">Chương trước</button>
             <button onclick="nextChapter()" id="next-btn">Chương tiếp theo</button>
@@ -26,7 +33,7 @@
             <button onclick="readChapter()">📢 Nghe đọc</button>
         </div>
 
-        <button onclick="logout()" style="background-color: red;">Đăng xuất</button>
+        <button onclick="logout()" class="logout-btn">Đăng xuất</button>
     </div>
 
     <script src="script.js"></script>
