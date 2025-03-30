@@ -5,17 +5,6 @@ body {
     color: white;
 }
 
-.container {
-    margin-top: 50px;
-}
-
-/* Hiệu ứng màu sắc lấp lánh cho chữ READING WITH LEE */
-@keyframes rainbowText {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
 h1 {
     font-size: 2.5em;
     font-weight: bold;
@@ -23,17 +12,23 @@ h1 {
     background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffee, #2400ff, #7a00ff, #ff00b3);
     background-size: 400% 400%;
     color: transparent;
-    background-clip: text;
     -webkit-background-clip: text;
-    -webkit-text-stroke: 1px white; /* Hỗ trợ trình duyệt không nhận gradient */
+    background-clip: text;
+    -webkit-text-stroke: 1px white;
     animation: rainbowText 6s infinite linear;
+}
+
+@keyframes rainbowText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .hidden {
     display: none;
 }
 
-.buttons button {
+.buttons button, .logout-btn {
     background-color: #4CAF50;
     color: white;
     padding: 10px;
@@ -42,7 +37,29 @@ h1 {
     cursor: pointer;
 }
 
+.logout-btn {
+    background-color: red;
+}
+
 .buttons button:disabled {
     background-color: #A9A9A9;
     cursor: not-allowed;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+li:hover {
+    background-color: #ddd;
 }
