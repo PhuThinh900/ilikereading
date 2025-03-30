@@ -9,28 +9,36 @@
 <body>
     <h1 class="glowing-text">READING WITH LEE</h1>
 
+    <!-- Đăng nhập -->
     <div id="login-section">
-        <input type="text" id="username" placeholder="Nhập tên người dùng">
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <input type="password" id="password" placeholder="Mật khẩu">
         <button onclick="handleLogin()">Đăng nhập</button>
     </div>
 
-    <div id="reader-section" style="display: none;">
-        <h2>Chọn truyện:</h2>
-        <select id="story-list" onchange="loadChapters()"></select>
-
-        <h2>Chọn chương:</h2>
-        <select id="chapter-list" onchange="loadChapterContent()"></select>
-
-        <h2 id="chapter-title"></h2>
-        <p id="chapter-content"></p>
-
-        <div class="buttons">
-            <button onclick="prevChapter()" id="prev-btn">Chương trước</button>
-            <button onclick="nextChapter()" id="next-btn">Chương tiếp theo</button>
-            <button onclick="readChapter()">📢 Nghe đọc</button>
+    <!-- Hiển thị danh sách truyện -->
+    <div id="home-section" style="display: none;">
+        <h2>Danh sách truyện</h2>
+        <div id="categories">
+            <button onclick="filterStories('Đam mỹ')">Đam mỹ</button>
+            <button onclick="filterStories('Ngôn tình')">Ngôn tình</button>
+            <button onclick="filterStories('Bách hợp')">Bách hợp</button>
         </div>
+        <div id="stories-list"></div>
+    </div>
 
-        <button onclick="logout()" style="background-color: red;">Đăng xuất</button>
+    <!-- Khu vực đọc truyện -->
+    <div id="reader-section" style="display: none;">
+        <h2 id="story-title"></h2>
+        <input type="text" id="search" placeholder="Tìm chương..." oninput="searchChapters()">
+        <h3 id="chapter-title"></h3>
+        <p id="chapter-content"></p>
+        <div class="buttons">
+            <button onclick="prevChapter()">Chương trước</button>
+            <button onclick="nextChapter()">Chương tiếp theo</button>
+            <select id="chapter-select" onchange="selectChapter(this.value)"></select>
+        </div>
+        <button onclick="backToHome()">Quay lại</button>
     </div>
 
     <script src="script.js"></script>
