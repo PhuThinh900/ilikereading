@@ -1,108 +1,95 @@
-let stories = [];
+let loggedInUser = null;
 let currentStory = null;
 let currentChapterIndex = 0;
-let currentChapters = [];
 
-async function fetchStories() {
-    try {
-        const response = await fetch('https://api.example.com/free-stories');
-        stories = await response.json();
-        displayStories();
-    } catch (error) {
-        console.error("Lỗi tải danh sách truyện:", error);
-    }
-}
-
-function displayStories() {
-    const storyList = document.getElementById("story-list");
-    storyList.innerHTML = "";
-    stories.forEach((story, index) => {
-        let li = document.createElement("li");
-        li.textContent = story.title;
-        li.onclick = () => selectStory(index);
-        storyList.appendChild(li);
-    });
-}
-
-function searchStories() {
-    const query = document.getElementById("search-story").value.toLowerCase();
-    const filteredStories = stories.filter(story => story.title.toLowerCase().includes(query));
-    
-    const storyList = document.getElementById("story-list");
-    storyList.innerHTML = "";
-    filteredStories.forEach((story, index) => {
-        let li = document.createElement("li");
-        li.textContent = story.title;
-        li.onclick = () => selectStory(index);
-        storyList.appendChild(li);
-    });
-}
-
-async function selectStory(index) {
-    currentStory = stories[index];
-    document.getElementById("story-title").textContent = currentStory.title;
-    document.getElementById("story-section").classList.add("hidden");
-    document.getElementById("reader-section").classList.remove("hidden");
-
-    try {
-        const response = await fetch(`https://api.example.com/story/${currentStory.id}/chapters`);
-        currentChapters = await response.json();
-        loadChapter(0);
-    } catch (error) {
-        console.error("Lỗi tải chương truyện:", error);
-    }
-}
-
-function loadChapter(index) {
-    if (index < 0 || index >= currentChapters.length) return;
-
-    currentChapterIndex = index;
-    document.getElementById("chapter-title").textContent = currentChapters[index].title;
-    document.getElementById("chapter-content").textContent = currentChapters[index].content;
-
-    document.getElementById("prev-btn").disabled = index === 0;
-    document.getElementById("next-btn").disabled = index === currentChapters.length - 1;
-
-    const select = document.getElementById("chapter-select");
-    select.innerHTML = "";
-    currentChapters.forEach((chap, i) => {
-        let option = document.createElement("option");
-        option.value = i;
-        option.textContent = chap.title;
-        select.appendChild(option);
-    });
-    select.value = index;
-}
-
-function prevChapter() {
-    loadChapter(currentChapterIndex - 1);
-}
-
-function nextChapter() {
-    loadChapter(currentChapterIndex + 1);
-}
-
-function selectChapter(index) {
-    loadChapter(parseInt(index));
-}
-
-function readChapter() {
-    let speech = new SpeechSynthesisUtterance();
-    speech.text = document.getElementById("chapter-content").textContent;
-    speech.lang = "vi-VN";
-    window.speechSynthesis.speak(speech);
-}
+const stories = [
+    { title: "Thiên Quan Tứ Phúc", category: "Đam mỹ", chapters: ["Chương 1: Mở đầu", "Chương 2: Gặp gỡ"] },
+    { title: "Cô Vợ Tổng Tài", category: "Ngôn tình", chapters: ["Chương 1: Bắt đầu", "Chương 2: Tiến triển"] },
+    { title: "Tình Yêu Hai Nữ", category: "Bách hợp", chapters: ["Chương 1: Trái tim rung động", "Chương 2: Nụ hôn đầu"] }
+];
 
 function handleLogin() {
     let username = document.getElementById("username").value;
-    if (username.trim()) {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("story-section").classList.remove("hidden");
-        fetchStories();
+    let password = document.getElementById("password").value;
+    if (username && password) {
+        loggedInUser = username;
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("home-section").style.display = "block";
+        loadStories();
+    } else {
+        alert("Vui lòng nhập tài khoản và mật khẩu!");
     }
 }
 
-function logout() {
-    document.getElementById("reader-section").classList.add("hidden");
-    document.getElementById("story-section").classList.remove("hidden");
+function loadStories() {
+    let storiesList = document.getElementById("stories-list");
+    storiesList.innerHTML = "";
+    stories.forEach((story, index) => {
+        let storyCard = document.createElement("div");
+        storyCard.className = "story-card";
+        storyCard.innerText = story.title;
+        storyCard.onclick = () => openStory(index);
+        storiesList.appendChild(storyCard);
+    });
+}
+
+function filterStories(category) {
+    let storiesList = document.getElementById("stories-list");
+    storiesList.innerHTML = "";
+    stories.filter(story => story.category === category).forEach((story, index) => {
+        let storyCard = document.createElement("div");
+        storyCard.className = "story-card";
+        storyCard.innerText = story.title;
+        storyCard.onclick = () => openStory(index);
+        storiesList.appendChild(storyCard);
+    });
+}
+
+function openStory(index) {
+    currentStory = stories[index];
+    currentChapterIndex = 0;
+    document.getElementById("home-section").style.display = "none";
+    document.getElementById("reader-section").style.display = "block";
+    document.getElementById("story-title").innerText = currentStory.title;
+    loadChapter();
+}
+
+function loadChapter() {
+    if (currentStory) {
+        document.getElementById("chapter-title").innerText = currentStory.chapters[currentChapterIndex];
+        document.getElementById("chapter-content").innerText = `Nội dung của ${currentStory.chapters[currentChapterIndex]}`;
+        let select = document.getElementById("chapter-select");
+        select.innerHTML = "";
+        currentStory.chapters.forEach((chapter, index) => {
+            let option = document.createElement("option");
+            option.value = index;
+            option.innerText = chapter;
+            select.appendChild(option);
+        });
+        select.value = currentChapterIndex;
+    }
+}
+
+function nextChapter() {
+    if (currentChapterIndex < currentStory.chapters.length - 1) {
+        currentChapterIndex++;
+        loadChapter();
+    }
+}
+
+function prevChapter() {
+    if (currentChapterIndex > 0) {
+        currentChapterIndex--;
+        loadChapter();
+    }
+}
+
+function selectChapter(index) {
+    currentChapterIndex = parseInt(index);
+    loadChapter();
+}
+
+function backToHome() {
+    document.getElementById("reader-section").style.display = "none";
+    document.getElementById("home-section").style.display = "block";
 }
