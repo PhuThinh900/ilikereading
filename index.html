@@ -7,38 +7,44 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 class="glowing-text">READING WITH LEE</h1>
+    <div id="app">
+        <header>
+            <h1>READING WITH LEE</h1>
+            <button id="toggle-darkmode">Dark Mode</button>
+            <input type="text" id="search" placeholder="Tìm kiếm truyện..." oninput="searchManga()">
+            <button onclick="logout()">Đăng xuất</button>
+        </header>
 
-    <!-- Đăng nhập -->
-    <div id="login-section">
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="handleLogin()">Đăng nhập</button>
-    </div>
-
-    <!-- Hiển thị danh sách truyện -->
-    <div id="home-section" style="display: none;">
-        <h2>Danh sách truyện</h2>
-        <div id="categories">
-            <button onclick="filterStories('Đam mỹ')">Đam mỹ</button>
-            <button onclick="filterStories('Ngôn tình')">Ngôn tình</button>
-            <button onclick="filterStories('Bách hợp')">Bách hợp</button>
+        <div id="home-page">
+            <h2>Danh sách truyện</h2>
+            <div id="genre-filter">
+                <label for="genre">Thể loại:</label>
+                <select id="genre" onchange="filterManga()">
+                    <option value="all">Tất cả</option>
+                    <option value="action">Hành động</option>
+                    <option value="romance">Lãng mạn</option>
+                    <option value="fantasy">Giả tưởng</option>
+                </select>
+            </div>
+            <div id="manga-list"></div>
         </div>
-        <div id="stories-list"></div>
-    </div>
 
-    <!-- Khu vực đọc truyện -->
-    <div id="reader-section" style="display: none;">
-        <h2 id="story-title"></h2>
-        <input type="text" id="search" placeholder="Tìm chương..." oninput="searchChapters()">
-        <h3 id="chapter-title"></h3>
-        <p id="chapter-content"></p>
-        <div class="buttons">
-            <button onclick="prevChapter()">Chương trước</button>
-            <button onclick="nextChapter()">Chương tiếp theo</button>
-            <select id="chapter-select" onchange="selectChapter(this.value)"></select>
+        <div id="chapter-list-page" class="hidden">
+            <h2 id="manga-title"></h2>
+            <div id="chapter-list"></div>
+            <button onclick="goBack()">Quay lại</button>
         </div>
-        <button onclick="backToHome()">Quay lại</button>
+
+        <div id="reader-page" class="hidden">
+            <h2 id="chapter-title"></h2>
+            <div id="chapter-content"></div>
+            <div class="buttons">
+                <button onclick="prevChapter()">Chương trước</button>
+                <button onclick="nextChapter()">Chương tiếp theo</button>
+                <button onclick="toggleAutoRead()">Tự động đọc</button>
+            </div>
+            <button onclick="goBack()">Quay lại</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
