@@ -7,39 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="login-container">
-        <h2>Đăng nhập</h2>
-        <input type="text" id="username" placeholder="Tên tài khoản">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="login()">Đăng nhập</button>
-        <p id="login-error"></p>
+    <header>
+        <h1 id="site-title">READING WITH LEE</h1>
+        <button id="darkModeToggle">Dark Mode</button>
+        <input type="text" id="search" placeholder="Tìm kiếm truyện...">
+    </header>
+
+    <div id="filters">
+        <select id="genreFilter">
+            <option value="">Thể loại</option>
+            <!-- Thể loại sẽ được thêm động từ script.js -->
+        </select>
     </div>
 
-    <div id="app-container" class="hidden">
-        <header>
-            <h1 id="logo">READING WITH LEE</h1>
-            <input type="text" id="search-box" placeholder="Tìm kiếm truyện...">
-            <button onclick="toggleDarkMode()">🌙</button>
-        </header>
+    <div id="manga-list"></div>
 
-        <div id="genre-filter">
-            <select id="genre-select">
-                <option value="">Tất cả thể loại</option>
-            </select>
-            <button onclick="filterByGenre()">Lọc</button>
-        </div>
-
-        <div id="manga-list"></div>
-
-        <div id="reader-container" class="hidden">
-            <button onclick="closeReader()">Quay lại</button>
-            <button onclick="toggleAutoScroll()">Tự động cuộn</button>
-            <div id="manga-reader"></div>
-        </div>
-
-        <footer>
-            <p>© 2025 Reading With Lee</p>
-        </footer>
+    <div id="reader">
+        <button id="prevChapter">Chương trước</button>
+        <button id="nextChapter">Chương sau</button>
+        <button id="autoRead">Tự động đọc</button>
+        <div id="manga-content"></div>
     </div>
 
     <script src="script.js"></script>
