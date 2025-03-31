@@ -1,104 +1,124 @@
-let loggedInUser = localStorage.getItem("loggedInUser");
-let currentManga = null;
-let currentChapter = 0;
-let autoReadInterval = null;
+const API_URL = "https://api.mangahook.com/v1/manga"; 
+let autoScroll = false;
+let scrollInterval;
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (loggedInUser) {
-        document.getElementById("login-container").classList.add("hidden");
-        document.getElementById("app-container").classList.remove("hidden");
-        loadMangaList();
-    }
+    checkLogin();
+    fetchManga();
+    loadGenres();
 });
 
-function login() {
-    let user = document.getElementById("username").value;
-    let pass = document.getElementById("password").value;
-    if (user && pass) {
-        localStorage.setItem("loggedInUser", user);
+function checkLogin() {
+    if (localStorage.getItem("user")) {
         document.getElementById("login-container").classList.add("hidden");
         document.getElementById("app-container").classList.remove("hidden");
-        loadMangaList();
-    } else {
-        alert("Vui lòng nhập tài khoản và mật khẩu!");
     }
 }
 
-function loadMangaList() {
-    fetch("https://api.jikan.moe/v4/manga")
+function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (username && password) {
+        localStorage.setItem("user", username);
+        location.reload();
+    } else {
+        document.getElementById("login-error").textContent = "Vui lòng nhập đầy đủ thông tin!";
+    }
+}
+
+function fetchManga() {
+    fetch(API_URL)
         .then(response => response.json())
         .then(data => {
-            let mangaList = document.getElementById("manga-list");
-            mangaList.innerHTML = "";
-            data.data.forEach(manga => {
-                let div = document.createElement("div");
-                div.innerHTML = `<img src="${manga.images.jpg.image_url}" width="100"><br>${manga.title}`;
-                div.onclick = () => loadChapters(manga);
-                mangaList.appendChild(div);
-            });
-        });
+            displayManga(data.manga);
+        })
+        .catch(error => console.error("Lỗi tải truyện:", error));
 }
 
-function loadChapters(manga) {
-    currentManga = manga;
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("chapter-list").classList.remove("hidden");
-    document.getElementById("manga-title").textContent = manga.title;
-    let chapterDiv = document.getElementById("chapters");
-    chapterDiv.innerHTML = "";
-    for (let i = 1; i <= 5; i++) {
-        let btn = document.createElement("button");
-        btn.textContent = `Chương ${i}`;
-        btn.onclick = () => loadChapter(i);
-        chapterDiv.appendChild(btn);
-    }
+function displayManga(mangas) {
+    const mangaList = document.getElementById("manga-list");
+    mangaList.innerHTML = "";
+
+    mangas.forEach(manga => {
+        const mangaItem = document.createElement("div");
+        mangaItem.classList.add("manga-item");
+        mangaItem.innerHTML = `
+            <img src="${manga.image}" alt="${manga.title}" onclick="openReader('${manga.id}')">
+            <p>${manga.title}</p>
+        `;
+        mangaList.appendChild(mangaItem);
+    });
 }
 
-function loadChapter(chapter) {
-    currentChapter = chapter;
-    document.getElementById("chapter-list").classList.add("hidden");
-    document.getElementById("reader").classList.remove("hidden");
-    document.getElementById("chapter-title").textContent = `Chương ${chapter}: ${currentManga.title}`;
-    document.getElementById("chapter-image").src = "https://placehold.co/600x800?text=Trang+truyện";
+function loadGenres() {
+    const genres = ["Action", "Romance", "Fantasy", "Horror", "Comedy"];
+    const genreSelect = document.getElementById("genre-select");
 
-    localStorage.setItem("lastRead", JSON.stringify({ manga: currentManga.mal_id, chapter }));
+    genres.forEach(genre => {
+        const option = document.createElement("option");
+        option.value = genre.toLowerCase();
+        option.textContent = genre;
+        genreSelect.appendChild(option);
+    });
 }
 
-function goHome() {
-    document.getElementById("chapter-list").classList.add("hidden");
-    document.getElementById("home").classList.remove("hidden");
-}
-
-function goChapterList() {
-    document.getElementById("reader").classList.add("hidden");
-    document.getElementById("chapter-list").classList.remove("hidden");
-}
-
-function prevPage() {
-    if (currentChapter > 1) loadChapter(currentChapter - 1);
-}
-
-function nextPage() {
-    loadChapter(currentChapter + 1);
-}
-
-function autoRead() {
-    if (autoReadInterval) {
-        clearInterval(autoReadInterval);
-        autoReadInterval = null;
-    } else {
-        autoReadInterval = setInterval(nextPage, 3000);
-    }
+function filterByGenre() {
+    const selectedGenre = document.getElementById("genre-select").value;
+    console.log("Lọc theo thể loại:", selectedGenre);
 }
 
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
 
-window.onload = function () {
-    let lastRead = localStorage.getItem("lastRead");
-    if (lastRead) {
-        lastRead = JSON.parse(lastRead);
-        loadChapter(lastRead.chapter);
+function openReader(mangaId) {
+    document.getElementById("manga-list").classList.add("hidden");
+    document.getElementById("reader-container").classList.remove("hidden");
+
+    fetch(`${API_URL}/${mangaId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("manga-reader").innerHTML = data.chapters.map(chapter => `
+                <p onclick="readChapter('${mangaId}', '${chapter.id}')">${chapter.title}</p>
+            `).join("");
+        });
+}
+
+function readChapter(mangaId, chapterId) {
+    fetch(`${API_URL}/${mangaId}/chapters/${chapterId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("manga-reader").innerHTML = data.pages.map(page => `
+                <img src="${page.image}" alt="Trang truyện">
+            `).join("");
+
+            localStorage.setItem("lastRead", JSON.stringify({ mangaId, chapterId }));
+        });
+}
+
+function closeReader() {
+    document.getElementById("manga-list").classList.remove("hidden");
+    document.getElementById("reader-container").classList.add("hidden");
+}
+
+function toggleAutoScroll() {
+    autoScroll = !autoScroll;
+
+    if (autoScroll) {
+        scrollInterval = setInterval(() => {
+            window.scrollBy(0, 1);
+        }, 50);
+    } else {
+        clearInterval(scrollInterval);
     }
-};
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const lastRead = JSON.parse(localStorage.getItem("lastRead"));
+
+    if (lastRead) {
+        openReader(lastRead.mangaId);
+        readChapter(lastRead.mangaId, lastRead.chapterId);
+    }
+});
