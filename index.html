@@ -7,28 +7,23 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1 id="site-title">READING WITH LEE</h1>
+    <div class="login-container" id="loginContainer">
+        <h2>Đăng Nhập</h2>
+        <input type="text" id="username" placeholder="Tên tài khoản">
+        <input type="password" id="password" placeholder="Mật khẩu">
+        <button onclick="login()">Đăng nhập</button>
+    </div>
+
+    <div class="app-container" id="appContainer" style="display: none;">
+        <h1 class="title">READING <span>WITH</span> LEE</h1>
         <button id="darkModeToggle">Dark Mode</button>
-        <input type="text" id="search" placeholder="Tìm kiếm truyện...">
-    </header>
-
-    <div id="filters">
-        <select id="genreFilter">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm truyện..." onkeyup="searchManga()">
+        <select id="genreFilter" onchange="filterManga()">
             <option value="">Thể loại</option>
-            <!-- Thể loại sẽ được thêm động từ script.js -->
         </select>
-    </div>
+        
+        <div id="mangaList" class="manga-list"></div>
 
-    <div id="manga-list"></div>
-
-    <div id="reader">
-        <button id="prevChapter">Chương trước</button>
-        <button id="nextChapter">Chương sau</button>
-        <button id="autoRead">Tự động đọc</button>
-        <div id="manga-content"></div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+        <div id="chapterList" class="chapter-list" style="display:none;"></div>
+        
+        <div id="readerContainer" class="reader-container"
