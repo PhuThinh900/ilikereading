@@ -8,38 +8,38 @@
 </head>
 <body>
     <div id="login-container">
-        <h1 class="glowing-text">READING WITH LEE</h1>
-        <input type="text" id="username" placeholder="Nhập tài khoản">
-        <input type="password" id="password" placeholder="Nhập mật khẩu">
+        <h2>Đăng nhập</h2>
+        <input type="text" id="username" placeholder="Tên tài khoản">
+        <input type="password" id="password" placeholder="Mật khẩu">
         <button onclick="login()">Đăng nhập</button>
+        <p id="login-error"></p>
     </div>
 
     <div id="app-container" class="hidden">
         <header>
-            <h1 class="glowing-text">READING WITH LEE</h1>
+            <h1 id="logo">READING WITH LEE</h1>
+            <input type="text" id="search-box" placeholder="Tìm kiếm truyện...">
             <button onclick="toggleDarkMode()">🌙</button>
         </header>
 
-        <div id="home">
-            <input type="text" id="search" placeholder="Tìm kiếm truyện..." oninput="searchManga()">
-            <select id="filter-genre"></select>
-            <div id="manga-list"></div>
+        <div id="genre-filter">
+            <select id="genre-select">
+                <option value="">Tất cả thể loại</option>
+            </select>
+            <button onclick="filterByGenre()">Lọc</button>
         </div>
 
-        <div id="chapter-list" class="hidden">
-            <h2 id="manga-title"></h2>
-            <div id="chapters"></div>
-            <button onclick="goHome()">🔙 Quay lại</button>
+        <div id="manga-list"></div>
+
+        <div id="reader-container" class="hidden">
+            <button onclick="closeReader()">Quay lại</button>
+            <button onclick="toggleAutoScroll()">Tự động cuộn</button>
+            <div id="manga-reader"></div>
         </div>
 
-        <div id="reader" class="hidden">
-            <h2 id="chapter-title"></h2>
-            <img id="chapter-image" src="" alt="Trang truyện">
-            <button onclick="prevPage()">◀ Trước</button>
-            <button onclick="nextPage()">▶ Tiếp</button>
-            <button onclick="autoRead()">📖 Tự động</button>
-            <button onclick="goChapterList()">📚 Chọn chương</button>
-        </div>
+        <footer>
+            <p>© 2025 Reading With Lee</p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
