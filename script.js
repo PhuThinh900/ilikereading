@@ -13,22 +13,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById("password");
 
     let currentUser = null;
-    const API_URL = "https://api.jikan.moe/v4/manga";
+    const API_URL = "https://mangahook-api.vercel.app/api"; // API MangaHook
 
     // Lấy danh sách truyện
     function fetchMangaList() {
-        fetch(API_URL)
+        fetch(`${API_URL}/mangaList`)
             .then(response => response.json())
             .then(data => {
                 mangaListContainer.innerHTML = "";
-                data.data.slice(0, 20).forEach(manga => {
+                data.mangaList.forEach(manga => {
                     let mangaItem = document.createElement("div");
                     mangaItem.classList.add("manga-item");
                     mangaItem.innerHTML = `
-                        <img src="${manga.images.jpg.image_url}" alt="${manga.title}">
+                        <img src="${manga.image}" alt="${manga.title}">
                         <p>${manga.title}</p>
                     `;
-                    mangaItem.onclick = () => loadChapters(manga.mal_id);
+                    mangaItem.onclick = () => loadChapters(manga.id);
                     mangaListContainer.appendChild(mangaItem);
                 });
             })
@@ -37,15 +37,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Lấy danh sách chương
     function loadChapters(mangaId) {
-        fetch(`https://api.jikan.moe/v4/manga/${mangaId}/chapters`)
+        fetch(`${API_URL}/manga/${mangaId}`)
             .then(response => response.json())
             .then(data => {
                 chapterListContainer.innerHTML = "";
                 chapterListContainer.classList.remove("hidden");
-                data.data.forEach(chapter => {
+                data.chapters.forEach(chapter => {
                     let chapterItem = document.createElement("button");
                     chapterItem.textContent = `Chương ${chapter.chapter}: ${chapter.title}`;
-                    chapterItem.onclick = () => readChapter(chapter);
+                    chapterItem.onclick = () => readChapter(mangaId, chapter.chapter);
                     chapterListContainer.appendChild(chapterItem);
                 });
             })
@@ -53,38 +53,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Đọc chương truyện
-    function readChapter(chapter) {
-        readerContainer.innerHTML = `<h2>Đọc: ${chapter.title}</h2><p>Chương ${chapter.chapter} đang được hiển thị.</p>`;
-        readerContainer.classList.remove("hidden");
-    }
-
-    // Dark Mode
-    darkModeToggle.addEventListener("click", function () {
-        document.body.classList.toggle("dark-mode");
-    });
-
-    // Đăng nhập
-    loginBtn.addEventListener("click", function () {
-        loginModal.style.display = "block";
-    });
-
-    closeLogin.addEventListener("click", function () {
-        loginModal.style.display = "none";
-    });
-
-    submitLogin.addEventListener("click", function () {
-        const username = usernameInput.value;
-        const password = passwordInput.value;
-
-        if (username && password) {
-            currentUser = username;
-            loginBtn.textContent = `Xin chào, ${username}`;
-            loginModal.style.display = "none";
-        } else {
-            alert("Vui lòng nhập tài khoản và mật khẩu");
-        }
-    });
-
-    // Tải truyện khi vào trang
-    fetchMangaList();
-});
+    function readChapter(mangaId, chapterNumber) {
+        fetch(`${API_URL}/manga0
