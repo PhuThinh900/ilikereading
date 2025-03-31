@@ -1,49 +1,49 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    color: black;
-    background: white;
-}
-
-.dark-mode {
-    background: black;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
     color: white;
+    margin: 0;
 }
 
-h1 {
+.glowing-text {
     font-size: 2.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, purple);
+    background-size: 400% 400%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 1px white;
+    animation: rainbowText 6s infinite linear;
+}
+
+@keyframes rainbowText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .hidden {
     display: none;
 }
 
-#search, select {
-    margin: 10px;
-    padding: 5px;
-}
-
-#manga-list, #chapter-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.manga-item {
-    border: 1px solid gray;
+button {
+    background-color: #4CAF50;
+    color: white;
     padding: 10px;
-    margin: 10px;
+    border: none;
+    margin: 5px;
     cursor: pointer;
 }
 
-.buttons button {
-    margin: 10px;
-    padding: 10px;
-    cursor: pointer;
+button:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
 }
 
-#toggle-darkmode {
-    position: fixed;
-    top: 10px;
-    right: 10px;
+#reader img {
+    width: 80%;
+    max-height: 500px;
 }
