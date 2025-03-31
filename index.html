@@ -7,33 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="login-container" id="loginContainer">
-        <h2>Đăng Nhập</h2>
+    <header>
+        <h1 id="logo">READING WITH LEE</h1>
+        <input type="text" id="searchInput" placeholder="Tìm kiếm truyện...">
+        <select id="genreFilter">
+            <option value="">Tất cả thể loại</option>
+            <option value="action">Hành động</option>
+            <option value="romance">Lãng mạn</option>
+            <option value="fantasy">Fantasy</option>
+        </select>
+        <button id="darkModeToggle">Dark Mode</button>
+        <button id="loginBtn">Đăng nhập</button>
+    </header>
+
+    <main>
+        <div id="mangaList"></div>
+        <div id="chapterList" class="hidden"></div>
+        <div id="readerContainer" class="hidden"></div>
+    </main>
+
+    <div id="loginModal" class="hidden">
+        <h2>Đăng nhập</h2>
         <input type="text" id="username" placeholder="Tên tài khoản">
         <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="login()">Đăng nhập</button>
+        <button id="submitLogin">Đăng nhập</button>
+        <button id="closeLogin">Đóng</button>
     </div>
 
-    <div class="app-container" id="appContainer" style="display: none;">
-        <h1 class="title">READING <span>WITH</span> LEE</h1>
-        <button id="darkModeToggle">Dark Mode</button>
-        <input type="text" id="searchInput" placeholder="Tìm kiếm truyện..." onkeyup="searchManga()">
-        <select id="genreFilter" onchange="filterManga()">
-            <option value="">Thể loại</option>
-        </select>
-        
-        <div id="mangaList" class="manga-list"></div>
-
-        <div id="chapterList" class="chapter-list" style="display:none;"></div>
-        
-        <div id="readerContainer" class="reader-container" style="display:none;">
-            <button onclick="prevChapter()">Chương trước</button>
-            <button onclick="nextChapter()">Chương sau</button>
-            <button onclick="toggleAutoRead()">Tự động đọc</button>
-            <div id="mangaReader"></div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
