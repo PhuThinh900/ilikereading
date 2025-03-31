@@ -1,57 +1,49 @@
 body {
-    background: linear-gradient(to right, #ff9a9e, #fad0c4);
     font-family: Arial, sans-serif;
     text-align: center;
+    color: black;
+    background: white;
+}
+
+.dark-mode {
+    background: black;
     color: white;
 }
 
 h1 {
     font-size: 2.5em;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffee, #2400ff, #7a00ff, #ff00b3);
-    background-size: 400% 400%;
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-stroke: 1px white;
-    animation: rainbowText 6s infinite linear;
 }
 
-@keyframes rainbowText {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.hidden {
+    display: none;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    margin: 5px;
-    cursor: pointer;
+#search, select {
+    margin: 10px;
+    padding: 5px;
 }
 
-button:disabled {
-    background-color: #A9A9A9;
-    cursor: not-allowed;
-}
-
-#stories-list {
+#manga-list, #chapter-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
 }
 
-.story-card {
-    background: white;
-    color: black;
-    padding: 15px;
-    border-radius: 10px;
+.manga-item {
+    border: 1px solid gray;
+    padding: 10px;
+    margin: 10px;
     cursor: pointer;
-    width: 150px;
-    text-align: center;
+}
+
+.buttons button {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#toggle-darkmode {
+    position: fixed;
+    top: 10px;
+    right: 10px;
 }
