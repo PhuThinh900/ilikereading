@@ -1,140 +1,104 @@
-const API_URL = "https://api.mangahook.com"; 
+let loggedInUser = localStorage.getItem("loggedInUser");
 let currentManga = null;
-let currentChapter = null;
+let currentChapter = 0;
 let autoReadInterval = null;
 
-// Dark Mode
-document.getElementById("toggle-darkmode").addEventListener("click", function() {
-    document.body.classList.toggle("dark-mode");
+document.addEventListener("DOMContentLoaded", () => {
+    if (loggedInUser) {
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("app-container").classList.remove("hidden");
+        loadMangaList();
+    }
 });
 
-// Hiển thị danh sách truyện
-async function loadManga() {
-    const response = await fetch(`${API_URL}/manga`);
-    const mangas = await response.json();
-    const mangaList = document.getElementById("manga-list");
-    mangaList.innerHTML = "";
-    mangas.forEach(manga => {
-        let item = document.createElement("div");
-        item.className = "manga-item";
-        item.innerHTML = `<img src="${manga.image}" width="100"><br>${manga.title}`;
-        item.onclick = () => showChapters(manga);
-        mangaList.appendChild(item);
-    });
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+    if (user && pass) {
+        localStorage.setItem("loggedInUser", user);
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("app-container").classList.remove("hidden");
+        loadMangaList();
+    } else {
+        alert("Vui lòng nhập tài khoản và mật khẩu!");
+    }
 }
 
-// Lọc truyện theo thể loại
-function filterManga() {
-    const genre = document.getElementById("genre").value;
-    loadManga(genre);
+function loadMangaList() {
+    fetch("https://api.jikan.moe/v4/manga")
+        .then(response => response.json())
+        .then(data => {
+            let mangaList = document.getElementById("manga-list");
+            mangaList.innerHTML = "";
+            data.data.forEach(manga => {
+                let div = document.createElement("div");
+                div.innerHTML = `<img src="${manga.images.jpg.image_url}" width="100"><br>${manga.title}`;
+                div.onclick = () => loadChapters(manga);
+                mangaList.appendChild(div);
+            });
+        });
 }
 
-// Tìm kiếm truyện
-function searchManga() {
-    const query = document.getElementById("search").value.toLowerCase();
-    document.querySelectorAll(".manga-item").forEach(item => {
-        item.style.display = item.textContent.toLowerCase().includes(query) ? "block" : "none";
-    });
-}
-
-// Hiển thị danh sách chương
-async function showChapters(manga) {
+function loadChapters(manga) {
     currentManga = manga;
-    document.getElementById("home-page").classList.add("hidden");
-    document.getElementById("chapter-list-page").classList.remove("hidden");
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("chapter-list").classList.remove("hidden");
     document.getElementById("manga-title").textContent = manga.title;
-    const response = await fetch(`${API_URL}/manga/${manga.id}/chapters`);
-    const chapters = await response.json();
-    const chapterList = document.getElementById("chapter-list");
-    chapterList.innerHTML = "";
-    chapters.forEach((chapter, index) => {
+    let chapterDiv = document.getElementById("chapters");
+    chapterDiv.innerHTML = "";
+    for (let i = 1; i <= 5; i++) {
         let btn = document.createElement("button");
-        btn.textContent = `Chương ${index + 1}`;
-        btn.onclick = () => readChapter(chapter);
-        chapterList.appendChild(btn);
-    });
+        btn.textContent = `Chương ${i}`;
+        btn.onclick = () => loadChapter(i);
+        chapterDiv.appendChild(btn);
+    }
 }
 
-// Đọc chương truyện
-async function readChapter(chapter) {
+function loadChapter(chapter) {
     currentChapter = chapter;
-    document.getElementById("chapter-list-page").classList.add("hidden");
-    document.getElementById("reader-page").classList.remove("hidden");
-    document.getElementById("chapter-title").textContent = chapter.title;
-    const response = await fetch(`${API_URL}/chapter/${chapter.id}`);
-    const data = await response.json();
-    document.getElementById("chapter-content").innerHTML = data.content;
-    saveProgress();
+    document.getElementById("chapter-list").classList.add("hidden");
+    document.getElementById("reader").classList.remove("hidden");
+    document.getElementById("chapter-title").textContent = `Chương ${chapter}: ${currentManga.title}`;
+    document.getElementById("chapter-image").src = "https://placehold.co/600x800?text=Trang+truyện";
+
+    localStorage.setItem("lastRead", JSON.stringify({ manga: currentManga.mal_id, chapter }));
 }
 
-// Lưu tiến độ đọc
-function saveProgress() {
-    localStorage.setItem("lastRead", JSON.stringify({ manga: currentManga, chapter: currentChapter }));
+function goHome() {
+    document.getElementById("chapter-list").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
 }
 
-// Tải tiến độ đọc
-function loadProgress() {
-    const lastRead = JSON.parse(localStorage.getItem("lastRead"));
-    if (lastRead) {
-        currentManga = lastRead.manga;
-        currentChapter = lastRead.chapter;
-        readChapter(currentChapter);
-    }
+function goChapterList() {
+    document.getElementById("reader").classList.add("hidden");
+    document.getElementById("chapter-list").classList.remove("hidden");
 }
 
-// Lịch sử đọc
-function loadHistory() {
-    const history = JSON.parse(localStorage.getItem("readingHistory")) || [];
-    return history;
+function prevPage() {
+    if (currentChapter > 1) loadChapter(currentChapter - 1);
 }
 
-function saveHistory() {
-    let history = loadHistory();
-    if (!history.some(item => item.chapter.id === currentChapter.id)) {
-        history.push({ manga: currentManga, chapter: currentChapter });
-    }
-    localStorage.setItem("readingHistory", JSON.stringify(history));
+function nextPage() {
+    loadChapter(currentChapter + 1);
 }
 
-// Chuyển chương
-function nextChapter() {
-    let index = currentManga.chapters.indexOf(currentChapter);
-    if (index < currentManga.chapters.length - 1) {
-        readChapter(currentManga.chapters[index + 1]);
-    }
-}
-
-function prevChapter() {
-    let index = currentManga.chapters.indexOf(currentChapter);
-    if (index > 0) {
-        readChapter(currentManga.chapters[index - 1]);
-    }
-}
-
-// Đọc tự động
-function toggleAutoRead() {
+function autoRead() {
     if (autoReadInterval) {
         clearInterval(autoReadInterval);
         autoReadInterval = null;
     } else {
-        autoReadInterval = setInterval(nextChapter, 5000);
+        autoReadInterval = setInterval(nextPage, 3000);
     }
 }
 
-// Quay lại trang trước
-function goBack() {
-    document.querySelectorAll(".hidden").forEach(el => el.classList.add("hidden"));
-    document.getElementById("home-page").classList.remove("hidden");
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
 }
 
-// Đăng xuất
-function logout() {
-    localStorage.clear();
-    location.reload();
-}
-
-// Load dữ liệu ban đầu
-document.addEventListener("DOMContentLoaded", () => {
-    loadManga();
-    loadProgress();
-});
+window.onload = function () {
+    let lastRead = localStorage.getItem("lastRead");
+    if (lastRead) {
+        lastRead = JSON.parse(lastRead);
+        loadChapter(lastRead.chapter);
+    }
+};
