@@ -4,36 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reading With Lee</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1 id="logo">READING WITH LEE</h1>
-        <input type="text" id="searchInput" placeholder="Tìm kiếm truyện...">
-        <select id="genreFilter">
-            <option value="">Tất cả thể loại</option>
-            <option value="action">Hành động</option>
-            <option value="romance">Lãng mạn</option>
-            <option value="fantasy">Giả tưởng</option>
-        </select>
-        <button id="darkModeToggle">Chế độ tối</button>
+    <h1 class="title">READING WITH LEE</h1>
+    
+    <div class="login-container">
+        <input type="text" id="username" placeholder="Tên đăng nhập">
         <button id="loginBtn">Đăng nhập</button>
-    </header>
-
-    <main>
-        <div id="mangaList"></div>
-        <div id="chapterList" class="hidden"></div>
-        <div id="readerContainer" class="hidden"></div>
-    </main>
-
-    <div id="loginModal" class="hidden">
-        <h2>Đăng nhập</h2>
-        <input type="text" id="username" placeholder="Tên tài khoản">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button id="submitLogin">Đăng nhập</button>
-        <button id="closeLogin">Đóng</button>
     </div>
 
-    <script src="main.js"></script>
+    <div id="main-content" class="hidden">
+        <input type="text" id="searchBox" placeholder="Tìm kiếm truyện...">
+        <select id="genreFilter">
+            <option value="">Thể loại</option>
+        </select>
+        <button id="darkModeToggle">Chế độ tối</button>
+
+        <div id="history"></div>
+        <div id="mangaList"></div>
+    </div>
+
+    <div id="chapterList" class="hidden"></div>
+    <div id="reader" class="hidden">
+        <button id="prevChapter">Chương trước</button>
+        <button id="autoRead">Tự động đọc</button>
+        <button id="nextChapter">Chương sau</button>
+        <div id="mangaContent"></div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
