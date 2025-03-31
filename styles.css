@@ -1,13 +1,16 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #fff;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
     color: #333;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-    background-color: #ffcc00;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
     padding: 10px;
+    color: white;
 }
 
 h1#logo {
@@ -25,21 +28,52 @@ h1#logo {
     100% { opacity: 0.7; }
 }
 
-#searchInput, #genreFilter, #darkModeToggle {
+#searchInput, #genreFilter, #darkModeToggle, #loginBtn {
     margin: 10px;
     padding: 8px;
     font-size: 16px;
+    border-radius: 5px;
+    border: none;
 }
 
-#loginModal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
+#mangaList, #chapterList, #readerContainer {
+    margin: 20px;
     padding: 20px;
+    background: white;
     border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.manga-item {
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.manga-item img {
+    width: 150px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.manga-item p {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
 }
 
 .hidden {
