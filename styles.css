@@ -5,42 +5,29 @@ body {
     text-align: center;
 }
 
-.hidden {
-    display: none;
-}
-
-#logo {
-    font-size: 24px;
+#site-title {
+    font-size: 2em;
     font-weight: bold;
-    background-image: linear-gradient(45deg, red, blue, purple);
+    background-image: linear-gradient(45deg, #ff0000, #ff7300, #fffa00, #00ff00, #00ffff, #0000ff, #ff00ff);
     -webkit-background-clip: text;
     color: transparent;
+    animation: sparkle 2s infinite linear;
 }
 
-#manga-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+@keyframes sparkle {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2); }
+    100% { filter: brightness(1); }
 }
 
-.manga-item {
-    margin: 10px;
+#darkModeToggle {
+    background-color: #222;
+    color: white;
     padding: 10px;
-    width: 150px;
-    text-align: center;
-}
-
-.manga-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+    cursor: pointer;
 }
 
 .dark-mode {
     background-color: black;
     color: white;
-}
-
-#login-container {
-    margin-top: 50px;
 }
