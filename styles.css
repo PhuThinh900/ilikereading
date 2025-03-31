@@ -1,16 +1,28 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    background: linear-gradient(to bottom right, #ff9a9e, #fad0c4);
     color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .title {
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
-    background-image: linear-gradient(to right, yellow, green, blue);
+    background-image: linear-gradient(to right, #ff7eb3, #ff758c);
     -webkit-background-clip: text;
     color: transparent;
+    margin-bottom: 20px;
 }
 
 .hidden {
@@ -33,4 +45,19 @@ button {
 .dark-mode {
     background: black;
     color: white;
+}
+
+.manga-item {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.manga-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
