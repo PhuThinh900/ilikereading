@@ -1,55 +1,129 @@
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     background-color: #f4f4f4;
     color: #333;
-    text-align: center;
-    padding: 20px;
 }
 
+/* Header */
 header {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #ffcc00;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    background-color: #4CAF50; /* Màu xanh lá cây cho header */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
 }
 
-#search {
-    width: 80%;
-    padding: 10px;
-    margin: 15px 0;
-    border: 2px solid #ffcc00;
-    border-radius: 5px;
-    font-size: 16px;
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng cho chữ */
 }
 
-#filters {
-    margin: 10px 0;
+/* Trang đăng nhập */
+.login-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-select {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-#truyen-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.truyen-item {
-    background-color: #fff;
-    margin: 10px;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-    width: 200px;
-}
-
-.truyen-item img {
+.login-container input {
     width: 100%;
-    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #45a049;
+}
+
+#error-message {
+    color: red;
+    font-size: 14px;
+}
+
+/* Trang chủ */
+.home-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.categories {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.categories button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.categories button:hover {
+    background-color: #45a049;
+}
+
+#darkModeSwitch {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #333;
+    color: white;
+}
+
+header.dark-mode {
+    background-color: #555;
+}
+
+.home-container.dark-mode {
+    background-color: #444;
+    color: white;
+}
+
+button.dark-mode {
+    background-color: #222;
+    color: white;
 }
