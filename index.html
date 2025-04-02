@@ -1,48 +1,29 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html><html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reading With Lee</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Trang Chủ Đọc Truyện</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">READING WITH LEE</h1>
-
-        <div class="login-container">
-            <input type="text" id="username" placeholder="Tên đăng nhập">
-            <button id="loginBtn">Đăng nhập</button>
-        </div>
-
-        <div id="main-content" class="hidden">
-            <div class="search-bar">
-                <input type="text" id="searchBox" placeholder="Tìm kiếm truyện...">
-                <select id="genreFilter">
-                    <option value="">Thể loại</option>
-                </select>
-                <button id="darkModeToggle">Chế độ tối</button>
-            </div>
-
-            <h2>Lịch sử đọc</h2>
-            <div id="history"></div>
-
-            <h2>Danh sách truyện</h2>
-            <div id="mangaList"></div>
-        </div>
-
-        <div id="chapterList" class="hidden">
-            <h2>Danh sách Chương</h2>
-        </div>
-
-        <div id="reader" class="hidden">
-            <button id="prevChapter">Chương trước</button>
-            <button id="autoRead">Tự động đọc</button>
-            <button id="nextChapter">Chương sau</button>
-            <div id="mangaContent"></div>
-        </div>
+    <header>Trang Chủ Đọc Truyện</header>
+    <input type="text" id="search" placeholder="Tìm kiếm truyện...">
+    <div id="filters">
+        <label for="category">Thể loại:</label>
+        <select id="category">
+            <option value="tatca">Tất cả</option>
+            <option value="dammy">Đam Mỹ</option>
+            <option value="bachhop">Bách Hợp</option>
+            <option value="ngontinh">Ngôn Tình</option>
+            <option value="trinhtham">Trinh Thám</option>
+            <option value="cotrang">Cổ Trang</option>
+            <option value="manga">Manga Hot</option>
+            <option value="kinhdi">Kinh Dị</option>
+        </select>
     </div>
-
+    <div id="truyen-list">
+        <!-- Danh sách truyện sẽ được hiển thị tại đây -->
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
