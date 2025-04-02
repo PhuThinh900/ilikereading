@@ -1,85 +1,78 @@
-document.getElementById("loginBtn").addEventListener("click", function() {
-    const username = document.getElementById("username").value;
-    if (username) {
-        localStorage.setItem("username", username);
-        document.querySelector(".login-container").classList.add("hidden");
-        document.getElementById("main-content").classList.remove("hidden");
-        loadMangaList();
+document.addEventListener("DOMContentLoaded", function () {
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const searchBox = document.getElementById("searchBox");
+    const truyenList = document.getElementById("truyen-list");
+
+    let darkMode = localStorage.getItem("darkMode") === "enabled";
+    if (darkMode) {
+        document.body.classList.add("dark-mode");
     }
-});
 
-// API MangaHook
-const API_URL = "https://api.mangahook.com"; 
-const API_KEY = "your_api_key_here";  // API key của bạn
-
-async function loadMangaList() {
-    try {
-        const response = await fetch(`${API_URL}/manga/list?api_key=${API_KEY}`);
-        const data = await response.json();
-        displayMangaList(data);
-    } catch (error) {
-        console.error("Lỗi tải danh sách truyện:", error);
-    }
-}
-
-function displayMangaList(mangaList) {
-    const mangaContainer = document.getElementById("mangaList");
-    mangaContainer.innerHTML = "";
-
-    mangaList.forEach(manga => {
-        const div = document.createElement("div");
-        div.classList.add("manga-item");
-        div.innerHTML = `<img src="${manga.image}" alt="${manga.title}">
-                         <p>${manga.title}</p>`;
-        div.addEventListener("click", () => loadChapters(manga.id));
-        mangaContainer.appendChild(div);
-    });
-}
-
-async function loadChapters(mangaId) {
-    try {
-        const response = await fetch(`${API_URL}/manga/${mangaId}/chapters?api_key=${API_KEY}`);
-        const data = await response.json();
-        displayChapterList(mangaId, data);
-    } catch (error) {
-        console.error("Lỗi tải danh sách chương:", error);
-    }
-}
-
-function displayChapterList(mangaId, chapters) {
-    const chapterList = document.getElementById("chapterList");
-    chapterList.innerHTML = "";
-    
-    chapters.forEach(chapter => {
-        const btn = document.createElement("button");
-        btn.textContent = `Chương ${chapter.number}`;
-        btn.addEventListener("click", () => readChapter(mangaId, chapter.id));
-        chapterList.appendChild(btn);
+    darkModeToggle.addEventListener("click", function () {
+        darkMode = !darkMode;
+        document.body.classList.toggle("dark-mode", darkMode);
+        localStorage.setItem("darkMode", darkMode ? "enabled" : "disabled");
     });
 
-    document.getElementById("main-content").classList.add("hidden");
-    chapterList.classList.remove("hidden");
-}
+    const truyenData = [
+        // Đam mỹ (20 bộ, bao gồm Ma Đạo Tổ Sư, Thiên Quan Tứ Phúc)
+        { id: 1, ten: "Thiên Quan Tứ Phúc", tacGia: "Mặc Hương Đồng Khứu", theLoai: "Đam mỹ", hinhAnh: "thien-quan-tu-phuc.jpg" },
+        { id: 2, ten: "Ma Đạo Tổ Sư", tacGia: "Mặc Hương Đồng Khứu", theLoai: "Đam mỹ", hinhAnh: "ma-dao-to-su.jpg" },
+        { id: 3, ten: "Truyện Đam Mỹ 3", tacGia: "Tác giả X", theLoai: "Đam mỹ", hinhAnh: "dam-my-3.jpg" },
+        { id: 4, ten: "Truyện Đam Mỹ 4", tacGia: "Tác giả Y", theLoai: "Đam mỹ", hinhAnh: "dam-my-4.jpg" },
+        // ... thêm đủ 20 bộ
+        
+        // Bách hợp (20 bộ)
+        { id: 21, ten: "Truyện Bách Hợp 1", tacGia: "Tác giả A", theLoai: "Bách hợp", hinhAnh: "bach-hop-1.jpg" },
+        // ... thêm đủ 20 bộ
 
-async function readChapter(mangaId, chapterId) {
-    try {
-        const response = await fetch(`${API_URL}/manga/${mangaId}/chapter/${chapterId}?api_key=${API_KEY}`);
-        const data = await response.json();
-        displayChapterContent(data);
-    } catch (error) {
-        console.error("Lỗi tải nội dung chương:", error);
+        // Ngôn tình (20 bộ)
+        { id: 41, ten: "Truyện Ngôn Tình 1", tacGia: "Tác giả B", theLoai: "Ngôn tình", hinhAnh: "ngon-tinh-1.jpg" },
+        // ... thêm đủ 20 bộ
+
+        // Trinh thám (20 bộ)
+        { id: 61, ten: "Truyện Trinh Thám 1", tacGia: "Tác giả C", theLoai: "Trinh thám", hinhAnh: "trinh-tham-1.jpg" },
+        // ... thêm đủ 20 bộ
+
+        // Cổ trang (20 bộ)
+        { id: 81, ten: "Truyện Cổ Trang 1", tacGia: "Tác giả D", theLoai: "Cổ trang", hinhAnh: "co-trang-1.jpg" },
+        // ... thêm đủ 20 bộ
+
+        // Manga hot (15 bộ)
+        { id: 101, ten: "Manga Hot 1", tacGia: "Tác giả E", theLoai: "Manga", hinhAnh: "manga-1.jpg" },
+        // ... thêm đủ 15 bộ
+
+        // Kinh dị (10 bộ)
+        { id: 116, ten: "Truyện Kinh Dị 1", tacGia: "Tác giả F", theLoai: "Kinh dị", hinhAnh: "kinh-di-1.jpg" }
+        // ... thêm đủ 10 bộ
+    ];
+
+    function hienThiTruyen(danhSach) {
+        truyenList.innerHTML = "";
+        danhSach.forEach(truyen => {
+            const truyenDiv = document.createElement("div");
+            truyenDiv.classList.add("truyen");
+            truyenDiv.innerHTML = `
+                <img src="images/${truyen.hinhAnh}" alt="${truyen.ten}">
+                <h3>${truyen.ten}</h3>
+                <p><b>Tác giả:</b> ${truyen.tacGia}</p>
+                <p><b>Thể loại:</b> ${truyen.theLoai}</p>
+                <button onclick="chonTruyen(${truyen.id})">Xem chi tiết</button>
+            `;
+            truyenList.appendChild(truyenDiv);
+        });
     }
-}
 
-function displayChapterContent(chapter) {
-    const contentDiv = document.getElementById("mangaContent");
-    contentDiv.innerHTML = chapter.pages.map(page => `<img src="${page}" style="width:100%;">`).join("");
-    
-    document.getElementById("chapterList").classList.add("hidden");
-    document.getElementById("reader").classList.remove("hidden");
-}
+    searchBox.addEventListener("input", function () {
+        const searchValue = searchBox.value.toLowerCase();
+        const filteredTruyen = truyenData.filter(truyen => truyen.ten.toLowerCase().includes(searchValue));
+        hienThiTruyen(filteredTruyen);
+    });
 
-// Chế độ tối
-document.getElementById("darkModeToggle").addEventListener("click", function() {
-    document.body.classList.toggle("dark-mode");
+    hienThiTruyen(truyenData);
+
+    window.chonTruyen = function (id) {
+        localStorage.setItem("truyenDangDoc", id);
+        window.location.href = "list-tap.html"; // Chuyển sang trang chọn tập
+    };
 });
