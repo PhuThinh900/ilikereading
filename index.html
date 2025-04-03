@@ -1,48 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Đọc Truyện - Readingwithlee</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Đọc Truyện</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .book-item,
+        .chapter-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .login-container h2 {
+            text-align: center;
+        }
+
+        .login-container button {
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- Header -->
-<header>
-    <h1>Readingwithlee</h1>
-</header>
-
-<!-- Trang đăng nhập -->
-<div class="login-container" id="loginPage">
-    <h2>Đăng nhập để tiếp tục</h2>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Tên người dùng" required>
-        <input type="password" id="password" placeholder="Mật khẩu" required>
-        <button type="submit">Đăng nhập</button>
-    </form>
-    <div id="error-message"></div>
-</div>
-
-<!-- Trang chủ (Sau khi đăng nhập thành công) -->
-<div class="home-container" id="homePage" style="display:none;">
-    <h2>Chọn thể loại truyện</h2>
-    <div class="categories">
-        <button onclick="showCategory('dammy')">Đam Mỹ</button>
-        <button onclick="showCategory('bachhop')">Bách Hợp</button>
-        <button onclick="showCategory('trinhtham')">Trinh Thám</button>
-        <button onclick="showCategory('cotrang')">Cổ Trang</button>
-        <button onclick="showCategory('manga')">Manga</button>
-        <button onclick="showCategory('kinhdi')">Kinh Dị</button>
+    <div id="login-page" class="login-container">
+        <h2>Đăng Nhập</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Tên người dùng" required><br>
+            <input type="password" id="password" placeholder="Mật khẩu" required><br>
+            <button type="submit">Đăng nhập</button>
+        </form>
     </div>
-    <div id="categoryDetails"></div>
-</div>
 
-<!-- Chế độ Dark Mode -->
-<div id="darkModeSwitch">
-    <button onclick="toggleDarkMode()">Chế độ tối</button>
-</div>
+    <div id="home-page" class="container" style="display:none;">
+        <h1>Chào mừng đến với trang đọc truyện</h1>
+        <div id="book-list"></div>
+    </div>
 
-<script src="script.js"></script>
+    <div id="chapter-list-page" class="container" style="display:none;">
+        <h1>Danh sách tập truyện</h1>
+        <div id="chapter-list"></div>
+    </div>
+
+    <div id="read-chapter-page" class="container" style="display:none;">
+        <h1>Đọc chương truyện</h1>
+        <div id="chapter-content"></div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('user')) {
+            document.getElementById('login-page').style.display = 'block';
+        } else {
+            document.getElementById('home-page').style.display = 'block';
+            loadBooks();
+        }
+
+        // Handle login
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            localStorage.setItem('user', document.getElementById('username').value);
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('home-page').style.display = 'block';
+            loadBooks();
+        });
+        // Simulated books and chapters data
+        const booksData = [
+            { title: "Truyện 1", image: "images/book1.jpg", author: "Tác giả 1", chapters: 3 },
+            { title: "Truyện 2", image: "images/book2.jpg", author: "Tác giả 2", chapters: 2 }
+        ];
+
+        const chaptersData = [
+            { title: "Tập 1", content: "Nội dung chương 1..." },
+            { title: "Tập 2", content: "Nội dung chương 2..." },
+            { title: "Tập 3", content: "Nội dung chương 3..." }
+        ];
+
+        // Load books into the homepage
+        function loadBooks() {
+            const bookList = document.getElementById('book-list');
+            bookList.innerHTML = '';
+            booksData.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.classList.add('book-item');
+                bookElement.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p>${book.author}</p>
+                    <button onclick="chooseBook('${book.title}')">Chọn truyện</button>
+                `;
+                bookList.appendChild(bookElement);
+            });
+        }
+
+        // Choose book and go to chapter list
+        function chooseBook(bookTitle) {
+            localStorage.setItem('chosenBook', bookTitle);
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('chapter-list-page').style.display = 'block';
+            loadChapters();
+        }
+
+        // Load chapters for the chosen book
+        function loadChapters() {
+            const chapterList = document.getElementById('chapter-list');
+            chapterList.innerHTML = '';
+            chaptersData.forEach((chapter, index) => {
+                const chapterElement = document.createElement('div');
+                chapterElement.classList.add('chapter-item');
+                chapterElement.innerHTML = `
+                    <h3>${chapter.title}</h3>
+                    <button onclick="readChapter(${index})">Đọc</button>
+                `;
+                chapterList.appendChild(chapterElement);
+            });
+        }
+
+        // Choose chapter and go to read page
+        function readChapter(chapterIndex) {
+            localStorage.setItem('currentChapter', chapterIndex);
+            document.getElementById('chapter-list-page').style.display = 'none';
+            document.getElementById('read-chapter-page').style.display = 'block';
+            loadChapterContent();
+        }
+
+        // Load content for the current chapter
+        function loadChapterContent() {
+            const chapterContent = document.getElementById('chapter-content');
+            const currentChapter = localStorage.getItem('currentChapter');
+            chapterContent.innerHTML = `<p>${chaptersData[currentChapter].content}</p>`;
+        }
+    </script>
+
 </body>
+
 </html>
