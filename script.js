@@ -12,14 +12,12 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         document.getElementById("error-message").innerText = "Thông tin đăng nhập không chính xác";
     }
 });
-
 // Hàm hiển thị danh sách thể loại truyện
 function showCategory(category) {
     var categoryDetails = document.getElementById("categoryDetails");
     categoryDetails.innerHTML = ""; // Reset nội dung cũ
 
     var categoryData = {
-        const booksData = {
     dammy: [
         { title: "Ma Đạo Tổ Sư", author: "Mặc Hương Đồng Khứu", image: "images/ma_dao_to_su.jpg", chapters: 120 },
         { title: "Thiên Quan Tứ Phúc", author: "Mặc Hương Đồng Khứu", image: "images/thien_quan_tu_phuc.jpg", chapters: 60 },
@@ -142,7 +140,59 @@ function showCategory(category) {
 
     categoryDetails.innerHTML = listHTML;
 }
+// Tải dữ liệu từ file JSON
+fetch('mangaData.json')
+  .then(response => response.json())
+  .then(data => {
+    mangaList = data;
+    showMangaList();  // Hiển thị danh sách truyện khi tải dữ liệu thành công
+  })
+  .catch(error => console.log('Có lỗi khi tải dữ liệu:', error));
 
+// Hiển thị danh sách truyện
+function showMangaList() {
+  const mangaListContainer = document.getElementById("manga-list");
+  mangaListContainer.innerHTML = "";  // Xóa danh sách cũ
+
+  mangaList.forEach(manga => {
+    const mangaItem = document.createElement("div");
+    mangaItem.classList.add("manga-item");
+    
+    const mangaTitle = document.createElement("h2");
+    mangaTitle.innerText = manga.name;
+    
+    const mangaImage = document.createElement("img");
+    mangaImage.src = manga.image;
+    mangaImage.alt = manga.name;
+
+    mangaItem.appendChild(mangaImage);
+    mangaItem.appendChild(mangaTitle);
+    
+    const chapterList = document.createElement("ul");
+    manga.chapters.forEach(chapter => {
+      const chapterItem = document.createElement("li");
+      chapterItem.innerText = chapter.title;
+      chapterItem.onclick = function() {
+        showChapter(manga.name, chapter.title);
+      };
+      chapterList.appendChild(chapterItem);
+    });
+
+    mangaItem.appendChild(chapterList);
+    mangaListContainer.appendChild(mangaItem);
+  });
+}
+
+// Hiển thị nội dung của một tập
+function showChapter(mangaName, chapterTitle) {
+  const manga = mangaList.find(m => m.name === mangaName);
+  if (manga) {
+    const chapter = manga.chapters.find(c => c.title === chapterTitle);
+    if (chapter) {
+      document.getElementById("chapter-title").innerText = chapter.title;
+      document.getElementById("chapter-content").innerText = chapter.content;
+    }
+  }
 // Chuyển chế độ tối sáng
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
