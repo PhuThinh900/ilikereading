@@ -1,129 +1,187 @@
-/* General Styling */
+/* Cấu trúc chung */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
 }
 
-/* Header */
-header {
-    background-color: #4CAF50; /* Màu xanh lá cây cho header */
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ddd;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-    font-family: 'Arial', sans-serif;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng cho chữ */
-}
-
-/* Trang đăng nhập */
+/* Đăng nhập */
 .login-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 100px auto;
     width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
 }
 
-.login-container input {
+#login-form input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
-
-.login-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.login-container button:hover {
-    background-color: #45a049;
-}
-
-#error-message {
-    color: red;
-    font-size: 14px;
-}
-
-/* Trang chủ */
-.home-container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.categories {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.categories button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.categories button:hover {
-    background-color: #45a049;
-}
-
-#darkModeSwitch {
-    text-align: center;
-    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 button {
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #007bff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
-/* Dark Mode */
-body.dark-mode {
-    background-color: #333;
+/* Trang chủ */
+.home-container {
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    font-size: 32px;
+}
+
+#book-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.book-item {
+    width: 200px;
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-item img {
+    width: 150px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.book-item h3 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.book-item p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Danh sách tập truyện */
+.chapter-list-container {
+    text-align: center;
+    padding: 20px;
+}
+
+#chapter-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chapter-item {
+    margin: 10px 0;
+}
+
+.chapter-item button {
+    padding: 8px 15px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
     color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-header.dark-mode {
-    background-color: #555;
+.chapter-item button:hover {
+    background-color: #218838;
 }
 
-.home-container.dark-mode {
-    background-color: #444;
-    color: white;
+/* Đọc chương truyện */
+.read-chapter-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-button.dark-mode {
-    background-color: #222;
-    color: white;
+#chapter-content {
+    background-color: #f8f8f8;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 80%;
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+/* Lấp lánh cho chữ 'readingwithlee' */
+h1 span {
+    font-size: 36px;
+    font-weight: bold;
+    color: #007bff;
+    background: linear-gradient(45deg, #ff007f, #00bfff, #7fff00);
+    -webkit-background-clip: text;
+    animation: glowing 1.5s ease-in-out infinite;
+}
+
+@keyframes glowing {
+    0% {
+        text-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f, 0 0 15px #ff007f, 0 0 20px #00bfff, 0 0 30px #00bfff;
+    }
+    50% {
+        text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 30px #ff007f, 0 0 40px #00bfff, 0 0 50px #00bfff;
+    }
+    100% {
+        text-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f, 0 0 15px #ff007f, 0 0 20px #00bfff, 0 0 30px #00bfff;
+    }
+}
+
+/* Tối ưu giao diện */
+@media (max-width: 768px) {
+    .book-item {
+        width: 150px;
+    }
+
+    #book-list {
+        gap: 10px;
+    }
+
+    #chapter-content {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        width: 250px;
+    }
+
+    .book-item {
+        width: 130px;
+    }
+
+    #chapter-content {
+        width: 100%;
+    }
 }
